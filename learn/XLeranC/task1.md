@@ -6,6 +6,8 @@
 ## 任务目标
 
 任务一：截图：注册完成 [BuilderHub](https://build.avax.network/?ref=ZETMV&utm_source=team1) 的截图 
+![task1-1](task1+XLeranC.jpg)
+
 
 
 参考截图可见 [作业参考](/public/作业参考.png)
@@ -14,6 +16,7 @@
 [可参考模板](/public/转发模板.md)
 
 图片命名方式：task1+你的名字
+![task1-2](task1+XLeranC+rednotice.jpg)
 
 ## 提交方式
 
