@@ -1,6 +1,64 @@
 # Task 3：使用 DEX Oracle 获取代币价格
 
-> 对应课程：第三章 Solidity 合约实战
+> 修订说明（2026-09-09）：以下“最终实现与链上证据”替代本文件后半部分的首次尝试。首次尝试是自建 AMM，**不作为本 Task3 提交或验收依据**；保留仅用于说明修订原因。
+
+## 最终实现与链上证据
+
+### 1. 真实 Fuji DEX
+
+本次使用 **Pangolin V2（Avalanche Fuji，Chain ID `43113`）**，而不是自建 AMM。
+
+| 项目 | 地址 |
+| --- | --- |
+| Pangolin Factory | [`0xE4A575550C2b460d2307b82dCd7aFe84AD1484dd`](https://testnet.snowtrace.io/address/0xE4A575550C2b460d2307b82dCd7aFe84AD1484dd) |
+| Pangolin Router | [`0x2D99ABD9008Dc933ff5c0CD271B88309593aB921`](https://testnet.snowtrace.io/address/0x2D99ABD9008Dc933ff5c0CD271B88309593aB921) |
+| WAVAX | [`0xd00ae08403B9bbb9124bB305C09058E32C39A48c`](https://testnet.snowtrace.io/address/0xd00ae08403B9bbb9124bB305C09058E32C39A48c) |
+| ABT | [`0xab8545161af1de74ef75f1cef4a7a1ceee596d49`](https://testnet.snowtrace.io/address/0xab8545161af1de74ef75f1cef4a7a1ceee596d49) |
+| ABT/WAVAX Pair | [`0x0307bD1D36b65DeE1652c37490aB89201983Dca3`](https://testnet.snowtrace.io/address/0x0307bD1D36b65DeE1652c37490aB89201983Dca3) |
+
+### 2. 真实流动性
+
+通过 Pangolin Router 的 `addLiquidityAVAX` 成功注入 **100,000 ABT + 0.05 AVAX**：
+
+- [添加流动性交易](https://testnet.snowtrace.io/tx/0xc0ea3c79ad835a8c5149ebcbd40581139cdeb13fd2f4c754f2f658bd89ddb8ad)，回执状态 `1`。
+- Pair 当前 `getReserves()`：`100000000000000000000000` ABT / `50000000000000000` WAVAX，即 **100,000 ABT / 0.05 WAVAX**。
+
+### 3. 独立业务合约：Router 价格直接决定发放量
+
+部署的业务合约：[`PangolinPricedAbtSale`](https://testnet.snowtrace.io/address/0xdBb76af289bE5aE0C893fc12bE6d3Eb23652F93D)。构造参数已链上读取并确认：`saleToken = ABT`、`router = Pangolin Router`、`wavax = WAVAX`。
+
+```solidity
+function quoteAbtForAvax(uint256 avaxAmount) public view returns (uint256 abtAmount) {
+    address[] memory path = new address[](2);
+    path[0] = wavax;
+    path[1] = address(saleToken);
+    uint256[] memory amounts = router.getAmountsOut(avaxAmount, path);
+    abtAmount = amounts[1];
+}
+
+function buy(uint256 minAbtOut) external payable nonReentrant returns (uint256 abtIssued) {
+    abtIssued = quoteAbtForAvax(msg.value);
+    if (abtIssued < minAbtOut) revert SlippageExceeded(abtIssued, minAbtOut);
+    saleToken.safeTransfer(msg.sender, abtIssued);
+    emit TokensPurchased(msg.sender, msg.value, abtIssued);
+}
+```
+
+这里 `router.getAmountsOut([WAVAX, ABT])` 的返回值就是 `buy()` 的 `abtIssued`，随后由业务合约实际转账给购买者；价格不是事件记录，也不是手动输入或硬编码常量。
+
+### 4. 链上业务使用证明
+
+- [业务合约部署交易](https://testnet.snowtrace.io/tx/0x1c810c6ba4ad1c02183f13794e53302977f508649b2ce15a7aa97650ee424e5e)，合约地址 `0xdBb76af289bE5aE0C893fc12bE6d3Eb23652F93D`。
+- ABT 库存注入交易：[`0xf3b8bd4294a5ef12b329fba5f786e609ce720a900fab96e206a8f7a7b4dfb13a`](https://testnet.snowtrace.io/tx/0xf3b8bd4294a5ef12b329fba5f786e609ce720a900fab96e206a8f7a7b4dfb13a)。
+- [按实时价格购买交易](https://testnet.snowtrace.io/tx/0xde5d11cea89e74ae2b3767078fa7b0e1ea7ddd7a6298714cebc47c9e5331d06f)，回执状态 `1`：支付 **0.001 AVAX**，触发 `TokensPurchased`，实际发放 **1955.016961782065611702 ABT**。
+
+购买交易同时包含 ABT `Transfer` 事件：从业务合约转出 `1955.016961782065611702 ABT` 给购买者。当前同金额 Router 报价仍为 `1955.016961782065611702 ABT`，与业务发放量一致，证明 DEX 实时价格已参与业务计算。
+
+### 5. 本地验证
+
+`PangolinPricedAbtSale` 本地 Hardhat 测试通过（`1 passing`）：在测试中更改 Router 报价后，同一支付金额的实际 ABT 发放量随之改变。
+
+## 已废弃的首次尝试（不作为证据）
 
 ## 实现概览
 
