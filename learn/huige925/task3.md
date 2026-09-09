@@ -29,6 +29,18 @@
 
 添加流动性交易调用 LFJ Router 的 `addLiquidityAVAX`。部署后链上读取 Pair 可见：`token0 = ABTv2`、`token1 = WAVAX`，且 reserves 非零。脚本在购买前从 Pair 读取到 `10,000 ABTv2 / 0.05 WAVAX`；向 `buyWithAvax` 支付 `0.001 AVAX` 时，实时计算并实际转出 `195.501696178206561170 ABTv2`。
 
+## 添加流动性截图
+
+下图通过 Avalanche Fuji RPC 核验了添加流动性交易、LFJ V1 Pair 当前 reserves 以及钱包持有的 JLP 数量；交易哈希可在 Snowtrace 中公开复核。
+
+![Avalanche Fuji 添加流动性与 LP 持仓链上核验](./images/task3-liquidity-proof.png)
+
+## DEX 价格读取与使用截图
+
+下图核验了 `buyWithAvax` 成功交易和 `AbtPurchased` 事件：合约根据 LFJ Pair 的实时 reserves，将 `0.001 AVAX` 报价并实际兑换为 `195.50169617820656117 ABTv2`。
+
+![LFJ DEX 价格读取与实际购买链上核验](./images/task3-price-use-proof.png)
+
 ## 获取价格与业务使用的核心代码
 
 ```solidity
