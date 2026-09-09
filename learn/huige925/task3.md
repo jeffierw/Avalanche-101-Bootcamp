@@ -31,13 +31,13 @@
 
 ## 添加流动性截图
 
-下图通过 Avalanche Fuji RPC 核验了添加流动性交易、LFJ V1 Pair 当前 reserves 以及钱包持有的 JLP 数量；交易哈希可在 Snowtrace 中公开复核。
+下图为 Snowtrace Fuji 测试网交易详情，显示添加 `10,000 ABTv2 / 0.05 WAVAX` 流动性成功，并向钱包铸造 `22.360679775 JLP`。
 
 ![Avalanche Fuji 添加流动性与 LP 持仓链上核验](./images/task3-liquidity-proof.png)
 
 ## DEX 价格读取与使用截图
 
-下图核验了 `buyWithAvax` 成功交易和 `AbtPurchased` 事件：合约根据 LFJ Pair 的实时 reserves，将 `0.001 AVAX` 报价并实际兑换为 `195.50169617820656117 ABTv2`。
+下图为 Snowtrace Fuji 测试网购买交易详情：`buyWithAvax` 调用成功，合约根据 LFJ Pair 的实时 reserves，将 `0.001 AVAX` 报价并实际兑换为 `195.50169617820656117 ABTv2`。
 
 ![LFJ DEX 价格读取与实际购买链上核验](./images/task3-price-use-proof.png)
 
