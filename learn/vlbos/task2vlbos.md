@@ -25,8 +25,8 @@ https://build.avax.network/console/primary-network/faucet
 ![alt text](task2vlbos_mydeployedfront.png)
 
 链上合约的地址
-0x4caA6669B44d2dDf94A7B7B9F711aab4671Cd998
+0x3aEBfb8E93cb3694167Dd797b2de278204397A4E
 
-(部署交易hash)[https://explorer-test.avax.network/c-chain/tx/0x5366bfa59ee4734af4708de2d8b7721a7e91d5a905bf536262e056a6764c672a]
+(部署交易hash)[https://explorer-test.avax.network/c-chain/tx/0x29f48a6f7ea2a59dcc573c3b936610fefdbe15fa779f56d289f64ee39b1af15f]
 
 
