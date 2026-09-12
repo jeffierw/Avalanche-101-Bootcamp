@@ -1,0 +1,32 @@
+# Task 2：<第二章 Vibe Coding开发你的第一个DApp>
+
+> 对应课程：第二章 
+> 截止提交：<9月6日> 24:00:00 (UTC+8)
+
+## 任务目标
+
+掌握 Vibe Coding 技巧，用 Scaffold-ETH 自己部署 ERC20 合约的应用
+
+## 参考资料
+Scaffold-ETH 项目开发模板
+https://scaffoldeth.io/
+https://github.com/scaffold-eth/scaffold-eth-2
+
+领取 Avalanche Fuji 测试网 token
+https://build.avax.network/console/primary-network/faucet
+
+## 任务要求
+把合约成功部署至Avalanche 测试网
+
+## 我的提交
+提供部署成功后截图，以及
+
+![alt text](task2vlbos_mydeployedcmd.png) 
+![alt text](task2vlbos_mydeployedfront.png)
+
+链上合约的地址
+0x3aEBfb8E93cb3694167Dd797b2de278204397A4E
+
+(部署交易hash)[https://explorer-test.avax.network/c-chain/tx/0x29f48a6f7ea2a59dcc573c3b936610fefdbe15fa779f56d289f64ee39b1af15f]
+
+
