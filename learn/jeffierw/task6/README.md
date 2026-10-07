@@ -144,7 +144,7 @@ CLI authentication
 
 ## 安全与可复核性
 
-- 本地 JWT、Runtime private key 与浏览器自动化缓存均通过根目录 `.gitignore` 排除，不提交任何密钥。
+- 本地 JWT、Runtime private key 与浏览器自动化缓存仅保存在未跟踪的本地工作目录；本 PR 只提交 Task6 说明、截图和脱敏后的 `terms.json`，不包含任何密钥。
 - Faucet 结果可通过 Arc Testnet Explorer 独立核验。
 - Advanced Proposal 的 DID、Agreement ID、Terms hash 和 Registration hash 均保留，便于后续继续跟踪。
 - 只有在 Seller 反签、交付物哈希与签名证据核验通过后，才会确认交付并释放 Escrow。
